@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">grupo4_parcial</string>
+    <string name="marcador">Marcador</string>
+    <string name="listpartidos">Listado de partidos</string>
 </resources>
