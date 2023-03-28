@@ -1,76 +1,92 @@
 package com.example.grupo4_parcial;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder> {
+public class CustomAdapter extends  RecyclerView.Adapter<CustomAdapter.ViewHolder> {
 
-    public void setListadoinformacion(ArrayList<Producto> listadoinformacion) {
+    public void setListadoinformacion(ArrayList<Partido> listadoinformacion) {
         this.listadoinformacion = listadoinformacion;
         notifyDataSetChanged();
     }
 
-    private ArrayList<Producto> listadoinformacion;
-    private View.OnClickListener onClickListener;
+    private ArrayList<Partido> listadoinformacion;
 
-    public CustomAdapter(ArrayList<Producto> listadoinformacion){
+    private OnClickListener onClickListener;
+
+    public CustomAdapter(ArrayList<Partido> listadoinformacion) {
         this.listadoinformacion = listadoinformacion;
         this.onClickListener = null;
     }
 
-    public void setOnClickListener(View.OnClickListener onClickListener) {
+    public void setOnClickListener(OnClickListener onClickListener){
         this.onClickListener = onClickListener;
     }
 
     @NonNull
     @Override
     public CustomAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View miview = LayoutInflater.from(parent.getContext().inflate(R.layout.))
+
+        View miview = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_producto,parent,false);
+        return new ViewHolder(miview);
+
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull CustomAdapter.ViewHolder holder, int position) {
 
+        Partido miPartido = listadoinformacion.get(position);
+        holder.enlazar(miPartido);
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return listadoinformacion.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
-        private TextView tv_rival,tv_marcador,tv_gf,tv_gc;
-        private ImageView iv_escudo;
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public ViewHolder(View itemView) {
+        private TextView tvmarcador,tvgf,tvgc,tvtitulo;
+        private ImageView ivrival;
+        public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            tv_rival = itemView.findViewById(R.id.tv_rival);
-            tv_gc = itemView.findViewById(R.id.tv_gc);
-            tv_gf= itemView.findViewById(R.id.tv_gf);
-            tv_marcador = itemView.findViewById(R.id.tv_marcador);
+            tvtitulo=itemView.findViewById(R.id.tv_rival);
+            tvmarcador=itemView.findViewById(R.id.tv_marcador);
+            tvgf=itemView.findViewById(R.id.tv_gf);
+            tvgc=itemView.findViewById(R.id.tv_gc);
+            ivrival=itemView.findViewById(R.id.iv_escudo);
+        }
+        public  void  enlazar(Partido miPartido){
+            tvtitulo.setText(miPartido.getRival());
+            tvmarcador.setText(R.string.marcador2);
+            Picasso.get().load(miPartido.getRivalUrl())
+                    .error(R.drawable.ic_launcher_background)
+                    .into(ivrival);
+
+            if (onClickListener != null){
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        onClickListener.OnItemClick(miPartido,getAdapterPosition());
+                    }
+                });
+            }
         }
 
-        public  void  enlazar(Producto miproducto){
-            tv_rival.setText(miproducto.getRival());
-            tv_gf.setText(miproducto.getGf());
-            tv_gc.setText(miproducto.getGf());
-            Picasso.get().load(miproducto.getRivalUrl())
-                    .error(R.drawable.ic_launcher_background)
-                    .into(Producto);
     }
+    public interface OnClickListener {
+        void OnItemClick(Partido miPartido, int posicion);
     }
 }
-

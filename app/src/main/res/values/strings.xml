@@ -2,4 +2,7 @@
     <string name="app_name">grupo4_parcial</string>
     <string name="marcador">Marcador</string>
     <string name="listpartidos">Listado de partidos</string>
+    <string name="listado">Listado</string>
+    <string name="Detalle">Detalle producto</string>
+    <string name="marcador2">Marcador</string>
 </resources>
